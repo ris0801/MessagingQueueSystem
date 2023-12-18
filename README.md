@@ -1,7 +1,7 @@
 # Description
 MessagingQueueSystem is a simplified implementation of a messaging queue system inspired by Apache Kafka. The project is created for educational purposes to understand the inner workings of Kafka-like systems, including message persistence, topic and partitioning, consumer groups, offset management, and basic replication.
 
-Note: Note all of these functionalities meet the actual Kafka implementation. This is just an inspiration and a personal project to understand the concepts.
+Note: Note all of these functionalities do not meet the actual Kafka implementation. This is just an inspiration and a personal project to understand the concepts.
 
 ## Table of Contents
 - [Installation](#installation)

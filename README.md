@@ -38,16 +38,16 @@ Features to be added in future:
 ##Basic concepts (Will also help in validating the functioning of the application)
 
 
-*Kafka Topics*
+*Kafka Topics* : 
 Think of a Kafka topic as a category or a channel where messages get broadcasted. It's like a folder in your email where you categorize your messages. In Kafka, we organize our data into topics. But there's a twist: topics can be split into several partitions, which is like having multiple sub-folders, each one managed on a different server. This setup is great for when you've got a ton of data because it helps in managing and scaling your workload. Producers send their messages to these topics, and consumers get their data from them.
 
-*Partitions in Kafka*
+*Partitions in Kafka* : 
 Now, let's talk about partitions. A partition in Kafka is a sequence in a topic, somewhat similar to a chapter in a book. Each partition keeps messages in the exact order they were received, ensuring everything stays organized chronologically. This design is fantastic for parallel processing, as different parts of your topic (the partitions) can be read and written to independently and simultaneously across different servers. Also, for safekeeping, these partitions are replicated across several servers, so if one server takes a coffee break (i.e., fails), your data is still safe and sound.
 
-*Kafka Consumers*
+*Kafka Consumers* : 
 Consumers in Kafka are like the audience of a TV channel, tuning into the topics (channels) they're interested in. These consumers read the messages from the topics and do whatever processing is needed. It's like having a personal assistant who picks up and organizes your emails for you. But what happens when you have a lot of emails or messages? That's where consumer groups come into play.
 
-*Consumer Groups*
+*Consumer Groups* : 
 A consumer group is a team of these assistants (consumers) who work together to process messages from a topic. Each member of the team is responsible for reading messages from one or more partitions but, importantly, no two members read from the same partition. It's like dividing the workload in a group project. If one assistant goes on a break or encounters a problem, no worries! The work they were doing (reading from a partition) gets reassigned to another team member. This setup helps Kafka manage large amounts of data while making sure every message is processed efficiently and reliably.
 
 ## Usage

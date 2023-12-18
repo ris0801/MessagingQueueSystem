@@ -1,4 +1,4 @@
-package com.mmqs.model;
+package com.example.message.model;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,7 +38,6 @@ public class Consumer {
         this.topicPartitionOffset = topicPartitionOffset;
     }
 
-    // In the Consumer class:
     public void setOffsetForPartition(String topicName, int partitionId, long offset) {
         this.topicPartitionOffset.put(topicName + "-" + partitionId, offset);
     }

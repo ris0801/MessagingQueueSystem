@@ -1,8 +1,10 @@
-package com.mmqs.core;
+package com.example.message.core;
 
-import com.mmqs.model.Partition;
-import com.mmqs.model.Topic;
-import com.mmqs.storage.MessageStore;
+import com.example.message.model.Partition;
+import com.example.message.model.Topic;
+import com.example.message.storage.MessageStore;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -10,17 +12,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class TopicManager {
 
     private static Map<String, Topic> topics = new HashMap<>();
 
     private Map<String, Integer> topicPartitionIndices = new HashMap<>();
-    private MessageStore messageStore = new MessageStore();
+
+    @Autowired
+    private MessageStore messageStore;
 
     public synchronized void createTopic(String topicName, int numPartitions) {
         List<Partition> partitions = new ArrayList<>();
         for (int i = 0; i < numPartitions; i++) {
-            partitions.add(new Partition(topicName, i));
+            Partition temp = new Partition(topicName, i);
+            temp.addReplica("testTopic/replica0");
+            temp.addReplica("testTopic/replica1");
+            partitions.add(temp);
         }
         topics.put(topicName, new Topic(topicName, partitions));
     }
@@ -30,7 +38,7 @@ public class TopicManager {
         if (topic == null) {
             throw new RuntimeException("Topic not found: " + topicName);
         }
-
+        //testTopic/partition0
         Partition partition;
         if (key == null) {
             // Round-robin distribution
@@ -39,15 +47,23 @@ public class TopicManager {
             // Key-based distribution
             partition = keyBasedPartitionSelection(topic, key);
         }
-
-        // Store the message in the selected partition
+        // Store the message in the selected partition and its replicas
         try {
-            messageStore.appendMessage(partition.getPartitionPath(), message);
+            //TODO: Message is not getting stored properly in replicas
+            replicateMessage(partition, message);
+
         } catch (IOException e) {
-            /**
-             * TODO: This needs to be handled properly
-             * */
             throw new RuntimeException(e);
+        }
+    }
+
+    private void replicateMessage(Partition partition, String message) throws IOException {
+        // Write to the main partition
+        messageStore.appendMessage(partition.getPartitionPath(), message);
+
+        // Write to all replicas
+        for (String replicaPath : partition.getReplicas()) {
+            messageStore.appendMessage(replicaPath, message);
         }
     }
 
@@ -84,3 +100,4 @@ public class TopicManager {
         return topics.get(topicName);
     }
 }
+

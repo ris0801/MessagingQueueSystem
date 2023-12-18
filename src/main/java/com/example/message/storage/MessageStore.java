@@ -1,32 +1,37 @@
-package com.mmqs.storage;
+package com.example.message.storage;
+
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 
+@Service
 public class MessageStore {
 
     private static final String DATA_DIR = "data";
 
-    public synchronized void appendMessage(String topic, String message) throws IOException {
-        File topicDir = new File(DATA_DIR, topic);
-        if (!topicDir.exists()) {
-            topicDir.mkdirs();
-        }
+    public synchronized void appendMessage(String path, String message) throws IOException {
+        File file = new File(DATA_DIR, path);
+        ensureDirectoryExists(file.getParentFile());
 
-        File partitionFile = new File(topicDir, "partition0");
-        try (FileWriter fw = new FileWriter(partitionFile, true);
+        try (FileWriter fw = new FileWriter(file, true);
              BufferedWriter bw = new BufferedWriter(fw)) {
             bw.write(message);
             bw.newLine();
         }
     }
 
-    public String readMessageAtOffset(String topic, long offset) throws IOException {
-        File topicDir = new File(DATA_DIR, topic);
-        File partitionFile = new File(topicDir, "partition0");
+    public String readMessageAtOffset(String path, long offset) throws IOException {
+        File file = new File(DATA_DIR, path);
 
-        try (RandomAccessFile raf = new RandomAccessFile(partitionFile, "r")) {
+        try (RandomAccessFile raf = new RandomAccessFile(file, "r")) {
             raf.seek(offset);
             return raf.readLine();
+        }
+    }
+
+    private void ensureDirectoryExists(File dir) {
+        if (!dir.exists()) {
+            dir.mkdirs();
         }
     }
 
@@ -45,7 +50,7 @@ public class MessageStore {
     }
 
     private String getPartitionPath(String topicName, int partitionId) {
-        return "./data/" + topicName + "/partition" + partitionId + "/" +  "partition" + partitionId;
+        return "./data/" + topicName + "/partition" + partitionId;
     }
 
 }

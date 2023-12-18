@@ -1,4 +1,4 @@
-package com.mmqs.model;
+package com.example.message.model;
 
 import java.util.List;
 
@@ -27,3 +27,4 @@ public class Topic {
         this.partitions = partitions;
     }
 }
+

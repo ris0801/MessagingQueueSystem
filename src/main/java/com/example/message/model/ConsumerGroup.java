@@ -1,4 +1,4 @@
-package com.mmqs.model;
+package com.example.message.model;
 
 import java.util.HashMap;
 import java.util.Map;

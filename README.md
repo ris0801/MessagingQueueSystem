@@ -55,48 +55,45 @@ A consumer group is a collection of consumers collaboratively processing message
 2. Bring up ProducerGUI (com/example/message/net/ProducerGUI.java)
 3. Bring up ConsumerGUI (com/example/message/net/ConsumerGUI.java)
 
-Example 1: 
+## Example: 
 
-1. In ProducerGUI fill in the below fields
+1. **Producer and Consumer Interaction**
+   - In `ProducerGUI`, fill in the fields:
+     - Topic: `testTopic`
+     - Partitions: `1`
+     - Message: `hello`
+   - In `ConsumerGUI`, fill in the fields:
+     - GroupId: `100`
+     - Consumer: `2`
+     - Topic: `testTopic`
+   - Then, click on `Fetch Message`. 
+   - You should be able to fetch the message. 
+   - Continue producing and fetching messages. This should work seamlessly.
 
-Topic: testTopic
-Partitions: 1
+2. **Group Subscription and Consumer Behavior**
+   - This application allows a group to subscribe to a topic, with all consumers within that group able to read from the topic.
+     - Note: This differs from Kafka's typical configuration where multiple groups can read from a single topic.
+     - All consumers can read messages from the start of a topic, which is also a configurable feature in Kafka.
+   - To test this:
+     - Add `Consumer: 5` to the existing `Group: 100`.
+     - Fetch messages; new consumers should be able to read from the start.
+     - Change to `Group: 105`, `Consumer: 10`.
+     - You should not be able to read messages from the topic.
 
-Message: hello
+3. **Experimentation with Topics and Groups**
+   - Try writing messages to different topics.
+   - Experiment with different combinations, such as the same consumer and group, or a new consumer and new group, to read from the new topic.
+   - All combinations should function correctly.
 
-In consumerGUI fill in the below fields
+4. **Simulating Partition Failure**
+   - Notice the hardcoded 2 replicas for each partition, providing redundancy.
+   - To simulate a partition failure:
+     - Delete the partition file from the `data` folder.
+     - Continue reading messages from the same topic; they should be accessible from the replicas.
 
-GroupId: 100
-Consumer: 2
-Topic : testTopic
-And then Fetch Message. 
+5. **Data Persistence and Application Restart**
+   - The application maintains data persistence in files.
+   - If you restart the application, create the topic again, and continue reading, it should function correctly.
+   - Note: Messages will be read from the beginning due to the current implementation.
+   - Maintaining the offset across restarts would require storing the offset in a persistent data store and using it to read messages from a specific offset.
 
-You
-should be able to fetch the message. 
-Try to keep on producing messages and keep on fetching messages. (Should work perfectly)
-
-2. This has been built in a way where a group can be subscribed to a topic and consumers within that group can read from the topic.
-(Not same as Kafka, usually all of this is configurable in Kafka)
-- Implemented such that one group reading from a topic (Configurable in Kafka, usually multiple groups can read message from a topic)
-- Implemented such that all Consumers can read messages from start in a topic. (Again configurable in actual Kakfa implementation)
-
-To try this out: 
-Add Consumer: 5 to the existing group 100
-Fetch messages and you should be able to read from the start for a new consumer in the group
-
-Change Group : 105, Consumer: 10
-You should not be able to read message from the topic
-
-3. Play around, write messages to different topics. Try (same consumer, same group) (new consumer, new group) to read from the new topic.
-All of this should work.
-
-4. To simulate partition failure
-You would also notice that there are 2 replicas (hard coded in code) for each partition. So in case the usual partition fails, then the messages can
-be read from replicas.
-Try this out, delete partition file from data folder (Could think of only this to simulate partition failure easily), now try to keep reading on messages
-from the same topic, and you should be able to, from the replicas.
-
-5. All this while data is persistent in files. Suppose you bring down the application and restart it, creating the topic, and continue reading from it
-you should be able to do it just fine. (Note: You will read messages from beginning, because that's how it is implemented).
-Maintaining offset across application restarts would require storing the offset in some sort of persistent data store and retrieving to read messages
-from offset.

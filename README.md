@@ -35,7 +35,7 @@ Features to be added in future:
 - ZooKeeper Integration: Use of ZooKeeper for storing metadata and handling node failures and leader election for partitions.
 - Basic Security: Basic authentication for producers and consumers, with message encryption in transit.
 
-##Basic concepts (Will also help in validating the functioning of the application)
+## Basic concepts (Will also help in validating the functioning of the application)
 
 
 *Kafka Topics* : 

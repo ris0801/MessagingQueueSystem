@@ -50,10 +50,10 @@ Consumers in Kafka are like viewers choosing a TV channel, selecting topics to r
 A consumer group is a collection of consumers collaboratively processing messages from a topic. Each consumer reads from specific partitions, ensuring workload distribution and efficient message processing. If a consumer fails, its workload is reassigned within the group, maintaining continuous data flow.
 
 ## Usage
-
-1. Bring up the Springboot startup application - MessageApplication
-2. Bring up ProducerGUI (com/example/message/net/ProducerGUI.java)
-3. Bring up ConsumerGUI (com/example/message/net/ConsumerGUI.java)
+1. Create data directory in root path: data (Path from root) 
+2. Bring up the Springboot startup application - MessageApplication
+3. Bring up ProducerGUI (com/example/message/net/ProducerGUI.java)
+4. Bring up ConsumerGUI (com/example/message/net/ConsumerGUI.java)
 
 ## Example: 
 
